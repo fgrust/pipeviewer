@@ -9,6 +9,7 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.3.5", features = ["derive"] }
 crossbeam = { version = "0.8.2", features = ["crossbeam-channel"] }
+crossterm = "0.26.1"
 
 [profile.dev]
 split-debuginfo = "packed"
