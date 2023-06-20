@@ -1,9 +1,9 @@
 use clap::Parser;
+use crossbeam::channel::{bounded, unbounded};
 use pipeviewer::{args::Cli, read, stats, write};
 
 use std::env;
 use std::io::Result;
-use std::sync::mpsc;
 use std::thread;
 
 fn main() -> Result<()> {
@@ -13,11 +13,11 @@ fn main() -> Result<()> {
     let outfile = cli.outfile.unwrap_or_default();
     let silent = cli.silent || !env::var_os("PV_SILENT").unwrap_or_default().is_empty();
 
-    let (stats_tx, stats_rx) = mpsc::channel();
-    let (write_tx, write_rx) = mpsc::channel();
+    let (stats_tx, stats_rx) = unbounded();
+    let (write_tx, write_rx) = bounded(1024);
 
-    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx));
-    let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_rx, write_tx));
+    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx, write_tx));
+    let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_rx));
     let write_handle = thread::spawn(move || write::write_loop(&outfile, write_rx));
 
     // crash if any threads have 'crashed'
