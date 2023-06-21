@@ -3,6 +3,12 @@ name = "pipeviewer"
 version = "0.1.0"
 authors = ["fgrust <fgrust@github.com>"]
 edition = "2021"
+description = "Educational version of the pv utility"
+homepage = "https://github.com/fgrust/pipeviewer"
+repository = "https://github.com/fgrust/pipeviewer"
+readme = "README.md"
+keywords = ["educational", "pv"]
+categories = ["command-line-utility"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
